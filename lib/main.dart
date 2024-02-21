@@ -1,4 +1,8 @@
+// Import necessary dependencies
+import 'package:calculator/login.dart';
+import 'package:calculator/network.dart';
 import 'package:flutter/material.dart';
+import 'package:calculator/Calculator_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,8 +13,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: lightTheme,
-      darkTheme: darkTheme,
       home: HomeScreen(),
     );
   }
@@ -28,14 +30,22 @@ class _HomeScreenState extends State<HomeScreen> {
   static List<Widget> _widgetOptions = <Widget>[
     Text('Home Page'),
     Text('Contact Page'),
-    Text('Calculator Page'),
-    Text('Login Page'),
+    CalculatorScreen(), // Include CalculatorScreen widget
+    LoginPage(), // Include your login page
+    NetworkPage(), // Include your network page
   ];
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+    if (index == 3) {
+      // If login option is clicked
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+      );
+    }
   }
 
   void toggleTheme() {
@@ -49,6 +59,19 @@ class _HomeScreenState extends State<HomeScreen> {
       _selectedIndex = index;
       Navigator.pop(context); // Close the drawer after item selection
     });
+    if (index == 3) {
+      // If login option is clicked
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+      );
+    } else if (index == 4) {
+      // If network option is clicked
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => NetworkPage()),
+      );
+    }
   }
 
   @override
@@ -124,6 +147,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 leading: Icon(Icons.login,
                     color: _selectedIndex == 3 ? Colors.blue : _getIconColor()),
               ),
+              ListTile(
+                title: Text('Network'),
+                onTap: () {
+                  _onDrawerItemTapped(4);
+                },
+                selected: _selectedIndex == 4,
+                tileColor: _selectedIndex == 4 ? Colors.blue : null,
+                selectedTileColor: Colors.blue,
+                leading: Icon(Icons.network_cell,
+                    color: _selectedIndex == 4 ? Colors.blue : _getIconColor()),
+              ),
             ],
           ),
         ),
@@ -147,6 +181,10 @@ class _HomeScreenState extends State<HomeScreen> {
             BottomNavigationBarItem(
               icon: Icon(Icons.login),
               label: 'Login',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.network_cell),
+              label: 'Network',
             ),
           ],
           currentIndex: _selectedIndex,
