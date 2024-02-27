@@ -1,8 +1,9 @@
-// Import necessary dependencies
+import 'package:flutter/material.dart';
 import 'package:calculator/login.dart';
 import 'package:calculator/network.dart';
-import 'package:flutter/material.dart';
+import 'package:calculator/camera.dart'; // Import your camera page
 import 'package:calculator/Calculator_screen.dart';
+import 'package:calculator/contact.dart'; // Import your contact page
 
 void main() {
   runApp(MyApp());
@@ -27,51 +28,27 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
   bool isDarkMode = false;
 
+  // Define widget options for the bottom navigation bar
   static List<Widget> _widgetOptions = <Widget>[
     Text('Home Page'),
-    Text('Contact Page'),
-    CalculatorScreen(), // Include CalculatorScreen widget
-    LoginPage(), // Include your login page
-    NetworkPage(), // Include your network page
+    ContactPage(),
+    // Updated to navigate to ContactPage
+    CalculatorScreen(),
+    LoginPage(),
+    NetworkPage(),
+    CameraPage(), // Include your camera page
   ];
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
-    if (index == 3) {
-      // If login option is clicked
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
-      );
-    }
   }
 
   void toggleTheme() {
     setState(() {
       isDarkMode = !isDarkMode;
     });
-  }
-
-  void _onDrawerItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      Navigator.pop(context); // Close the drawer after item selection
-    });
-    if (index == 3) {
-      // If login option is clicked
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
-      );
-    } else if (index == 4) {
-      // If network option is clicked
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => NetworkPage()),
-      );
-    }
   }
 
   @override
@@ -89,77 +66,6 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           ],
-        ),
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              DrawerHeader(
-                child: Text(
-                  'Options',
-                  style: TextStyle(color: Colors.white, fontSize: 24),
-                ),
-                decoration: BoxDecoration(
-                  color: isDarkMode ? Colors.black : Colors.blue,
-                ),
-              ),
-              ListTile(
-                title: Text('Home'),
-                onTap: () {
-                  _onDrawerItemTapped(0);
-                },
-                selected: _selectedIndex == 0,
-                tileColor: _selectedIndex == 0 ? Colors.blue : null,
-                selectedTileColor: Colors.blue,
-                leading: Icon(Icons.home,
-                    color: _selectedIndex == 0 ? Colors.blue : _getIconColor()),
-              ),
-              ListTile(
-                title: Text('Contact'),
-                onTap: () {
-                  _onDrawerItemTapped(1);
-                },
-                selected: _selectedIndex == 1,
-                tileColor: _selectedIndex == 1 ? Colors.blue : null,
-                selectedTileColor: Colors.blue,
-                leading: Icon(Icons.contact_phone,
-                    color: _selectedIndex == 1 ? Colors.blue : _getIconColor()),
-              ),
-              ListTile(
-                title: Text('Calculator'),
-                onTap: () {
-                  _onDrawerItemTapped(2);
-                },
-                selected: _selectedIndex == 2,
-                tileColor: _selectedIndex == 2 ? Colors.blue : null,
-                selectedTileColor: Colors.blue,
-                leading: Icon(Icons.calculate,
-                    color: _selectedIndex == 2 ? Colors.blue : _getIconColor()),
-              ),
-              ListTile(
-                title: Text('Login'),
-                onTap: () {
-                  _onDrawerItemTapped(3);
-                },
-                selected: _selectedIndex == 3,
-                tileColor: _selectedIndex == 3 ? Colors.blue : null,
-                selectedTileColor: Colors.blue,
-                leading: Icon(Icons.login,
-                    color: _selectedIndex == 3 ? Colors.blue : _getIconColor()),
-              ),
-              ListTile(
-                title: Text('Network'),
-                onTap: () {
-                  _onDrawerItemTapped(4);
-                },
-                selected: _selectedIndex == 4,
-                tileColor: _selectedIndex == 4 ? Colors.blue : null,
-                selectedTileColor: Colors.blue,
-                leading: Icon(Icons.network_cell,
-                    color: _selectedIndex == 4 ? Colors.blue : _getIconColor()),
-              ),
-            ],
-          ),
         ),
         body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
@@ -185,6 +91,10 @@ class _HomeScreenState extends State<HomeScreen> {
             BottomNavigationBarItem(
               icon: Icon(Icons.network_cell),
               label: 'Network',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.camera), // Camera icon
+              label: 'Camera', // Camera label
             ),
           ],
           currentIndex: _selectedIndex,
